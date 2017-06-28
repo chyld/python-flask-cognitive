@@ -94,8 +94,8 @@ def post_visual():
     k = '70b9662c2397b6513d9c084ea9217c4c6f80e9a2'
     v = '2016-05-19'
     url = request.values['url']
-    v = VisualRecognitionV3(api_key=k, version=v)
-    o = v.classify(images_url=url)
+    vis = VisualRecognitionV3(api_key=k, version=v)
+    o = vis.classify(images_url=url)
     klasses = o['images'][0]['classifiers'][0]['classes']
     return render_template('visual.html', url=url, klasses=klasses)
 
