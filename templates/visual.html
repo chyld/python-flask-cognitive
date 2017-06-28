@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>Visual</title>
+  </head>
+  <body>
+    <h1>Visual Recognition</h1>
+    <form method="post" action="/visual">
+      <textarea name='url'></textarea>
+      <button>Go!</button>
+    </form>
+    <div>
+      <div>
+        <img width="150" height="150" src="{{ url }}" />
+      </div>
+      <ul>
+        {% for klass in klasses %}
+          <li>{{ klass['class'] }} -> {{ klass['score'] }}</li>
+        {% endfor %}
+      <ul>
+    </div>
+  </body>
+</html>

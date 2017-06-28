@@ -1,6 +1,6 @@
 import sys
 from flask import Flask, render_template, request
-from watson_developer_cloud import ToneAnalyzerV3
+from watson_developer_cloud import ToneAnalyzerV3, LanguageTranslatorV2, VisualRecognitionV3
 
 app = Flask(__name__)
 
@@ -63,6 +63,41 @@ def post_tone():
         if tone['category_id'] == 'emotion_tone':
             tones = tone['tones']
     return render_template('tone.html', tones=tones)
+
+# ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+
+@app.route('/translate', methods=['GET'])
+def get_translate():
+    return render_template('translate.html', tones=[])
+
+@app.route('/translate', methods=['POST'])
+def post_translate():
+    u = 'c2b1bcd1-7ffe-4299-b7e0-061313b808c9'
+    p = 'N7XheyFtb4qs'
+    text = request.values['text']
+    t = LanguageTranslatorV2(username=u, password=p)
+    o = t.translate(text=text, source='en', target='es')
+    return render_template('translate.html', o=o, text=text)
+
+# ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+
+@app.route('/visual', methods=['GET'])
+def get_visual():
+    return render_template('visual.html', klasses=[])
+
+@app.route('/visual', methods=['POST'])
+def post_visual():
+    k = '70b9662c2397b6513d9c084ea9217c4c6f80e9a2'
+    v = '2016-05-19'
+    url = request.values['url']
+    v = VisualRecognitionV3(api_key=k, version=v)
+    o = v.classify(images_url=url)
+    klasses = o['images'][0]['classifiers'][0]['classes']
+    return render_template('visual.html', url=url, klasses=klasses)
 
 # ---------------------------------------------------------------------------- #
 # ---------------------------------------------------------------------------- #

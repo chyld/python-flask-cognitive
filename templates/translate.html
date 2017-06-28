@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>Translate</title>
+  </head>
+  <body>
+    <h1>Translator</h1>
+    <form method="post" action="/translate">
+      <textarea name='text'></textarea>
+      <button>Go!</button>
+    </form>
+    <div>
+      {{ text }} => {{ o }}
+    </div>
+  </body>
+</html>
