@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Tone</title>
+  </head>
+  <body>
+    <h1>Tone Analyzer</h1>
+    <form method="post" action="/tone">
+      <textarea name='text'></textarea>
+      <button>Go!</button>
+    </form>
+    <div>
+      <ul>
+        {% for tone in tones %}
+          <li>{{ tone['tone_name'] }} - {{ tone['score'] }}</li>
+        {% endfor %}
+      <ul>
+    </div>
+  </body>
+</html>
