@@ -1,8 +1,10 @@
 import sys
+import json
 from flask import Flask, render_template, request
-from watson_developer_cloud import ToneAnalyzerV3, LanguageTranslatorV2, VisualRecognitionV3
+from watson_developer_cloud import ToneAnalyzerV3, LanguageTranslatorV2, VisualRecognitionV3, SpeechToTextV1
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = '/Users/chyld/Code/www/uploads'
 
 # ---------------------------------------------------------------------------- #
 # ---------------------------------------------------------------------------- #
@@ -98,6 +100,29 @@ def post_visual():
     o = vis.classify(images_url=url)
     klasses = o['images'][0]['classifiers'][0]['classes']
     return render_template('visual.html', url=url, klasses=klasses)
+
+# ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+
+@app.route('/mic', methods=['GET'])
+def get_mic():
+    return render_template('mic.html')
+
+@app.route('/audio', methods=['POST'])
+def post_audio():
+    u = 'ab6e940a-85e1-441b-b3b8-3ed5c18f4123'
+    p = 'kn07P10JAcUj'
+    s2t = SpeechToTextV1(username=u, password=p, x_watson_learning_opt_out=False)
+    # print(json.dumps(s2t.models(), indent=2))
+    # print(json.dumps(s2t.get_model('en-US_BroadbandModel'), indent=2))
+    request.files['voice'].save('uploads/a.wav')
+
+    with open('uploads/a.wav', 'rb') as f:
+        out = s2t.recognize(f, content_type='audio/wav', timestamps=True,word_confidence=True)
+
+    values = out['results'][0]['alternatives'][0]['word_confidence']
+    return render_template('partial.html', values=values)
 
 # ---------------------------------------------------------------------------- #
 # ---------------------------------------------------------------------------- #
