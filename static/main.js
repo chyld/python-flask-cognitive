@@ -39,9 +39,6 @@ function uploadAudio(){
 
     request.open("post", "/audio");
     request.send(formData);
-
-
-
   });
 }
 
